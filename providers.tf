@@ -13,6 +13,12 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+    features {}
 
+}
+
+provider "azurerm" {
+  alias = "uat-sub"
+  subscription_id = "0000000000000000000000000"
+  
 }
