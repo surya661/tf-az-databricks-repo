@@ -1,7 +1,5 @@
 mock_provider "azurerm" {}
 
-
-
 variables {
   region              = "westus"
   resource_group_name = "test-rg"

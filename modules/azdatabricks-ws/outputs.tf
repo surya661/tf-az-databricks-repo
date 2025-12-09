@@ -29,3 +29,8 @@ output "databricks_host" {
  output "tags" {
   value = azurerm_resource_group.rg.tags
  }
+
+ output "azure_workspace_resource_id" {
+  value = azurerm_databricks_workspace.azdb.workspace_id
+   
+ }

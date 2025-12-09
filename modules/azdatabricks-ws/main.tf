@@ -1,10 +1,10 @@
-resource "random_string" "naming" {
+/*resource "random_string" "naming" {
   special = false
   upper   = false
   length  = 5
 
 }
-/*data "external" "me" {
+data "external" "me" {
   program = [
     "bash", "-c",
     "az account show --query '{name:user.name}' --output json"
