@@ -5,11 +5,18 @@ terraform {
     }
   }
 }
-/*
-provider "databricks" {
+/*provider "databricks" {
   host = "https://adb-1217315119416603.3.azuredatabricks.net"
 
+}*/
+provider "databricks" {
+  alias         = "accounts"
+  host          = "adb-31100767013367.7.azuredatabricks.net"
+  account_id    = "31100767013367"
+  client_id     = "1c20b39e-d719-4095-9001-e3e367f16892"
+  client_secret = "dosebfb2684c89c2228c43ff169f451fc1c2"
 }
+
 
 resource "databricks_cluster" "azdb-cluster" {
   cluster_name            = var.cluster_name
@@ -49,7 +56,6 @@ resource "databricks_cluster" "azdb-cluster" {
   is_pinned = var.is_pinned
   idempotency_token = var.idempotency_token
   no_wait = var.no_wait
-  
-  
+  use_ml_runtime = var.use_ml_runtime
+  is_single_node = var.is_single_node   
 }
-*/

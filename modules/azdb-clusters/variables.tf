@@ -106,12 +106,13 @@ variable "use_ml_runtime" {
     type = bool
      
 }
-variable "is_single_node " {
+variable "is_single_node" {
     description = "When set to true, Databricks will automatically set single node related custom_tags, spark_conf, and num_workers."
     type = bool
+    default = false
   
 }
-variable "node_type_id " {
+variable "node_type_id" {
     description = "(Required - optional if instance_pool_id is given) Any supported databricks_node_type id. If instance_pool_id is specified, this field is not needed."
     type = string
   
@@ -183,7 +184,18 @@ variable "num_workers" {
   description = "List of allowed languages for Databricks notebooks"
   type = list(string)
   default = [ "python", "sql", "r" ]
+}
+variable "allowedLanguages" {
+
+   description = "List of allowed languages for Databricks notebooks"
+  type = list(string)
+  default = [ "python", "sql", "r" ]
 }*/
+variable "allowedLanguages" {
+  description = "List of allowed Databricks notebook languages (e.g., python, sql, r)"
+  type        = list(string)
+  default     = ["python", "sql", "r"]  # You may adjust as needed
+}
 variable "init_scripts" {
   description = "for an init script stored in ADLS:"
   type = string  
