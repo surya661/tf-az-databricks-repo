@@ -1,51 +1,42 @@
-resource "random_string" "naming" {
+/*resource "random_string" "naming" {
   special = false
   upper   = false
   length  = 5
 
 }
-/*data "external" "me" {
+data "external" "me" {
   program = [
     "bash", "-c",
     "az account show --query '{name:user.name}' --output json"
     ]
 }*/
 
-locals {
-  prefix = "databricks${random_string.naming.result}"
-  tags = {
-    env = "dev"
-    #owner = data.external.me.result.name
-
-  }
-}
-
 resource "azurerm_resource_group" "rg" {
-  name     = "${local.prefix}-rg"
+  name     = "${var.databricks_name}-rg"
   location = var.region
-  tags     = local.tags
+  tags     = var.tags
 
 }
 
 resource "azurerm_virtual_network" "vnet" {
-  name                = "${local.prefix}-vnet"
+  name                = "${azurerm_resource_group.rg.name}-vnet"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   address_space       = [var.cidr]
-  tags                = local.tags
+  tags                = var.tags
 
 }
 
 resource "azurerm_network_security_group" "nsg" {
-  name                = "${local.prefix}-nsg"
+  name                = "${var.databricks_name}-nsg"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  tags                = local.tags
+  tags                = var.tags
 
 }
 
 resource "azurerm_subnet" "psnet" {
-  name                 = "${local.prefix}-public-snet"
+  name                 = "${var.databricks_name}-public-snet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [cidrsubnet(var.cidr, 3, 0)]
@@ -69,7 +60,7 @@ resource "azurerm_subnet_network_security_group_association" "public" {
 }
 
 resource "azurerm_subnet" "prsnet" {
-  name                 = "${local.prefix}-private-snet"
+  name                 = "${var.databricks_name}-private-snet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [cidrsubnet(var.cidr, 3, 1)]
@@ -93,12 +84,12 @@ resource "azurerm_subnet_network_security_group_association" "private" {
 }
 
 resource "azurerm_databricks_workspace" "azdb" {
-  name                        = "${local.prefix}-workspace"
+  name                        = "${var.databricks_name}-workspace"
   resource_group_name         = azurerm_resource_group.rg.name
   location                    = azurerm_resource_group.rg.location
   sku                         = "premium"
-  managed_resource_group_name = "${local.prefix}-workspace-rg"
-  tags                        = local.tags
+  managed_resource_group_name = "${var.databricks_name}-workspace-rg"
+  tags                        = var.tags
   
   custom_parameters {
     no_public_ip                                         = var.no_public_ip

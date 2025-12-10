@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    databricks = {
+      source = "databricks/databricks"
+    }
+  }
+}
+
 provider "databricks" {
   azure_workspace_resource_id = azurerm_databricks_workspace.azdb.id
 }
@@ -35,10 +43,4 @@ resource "databricks_job" "db_job" {
     }
   
 }
-terraform {
-  required_providers {
-    databricks = {
-      source = "databricks/databricks"
-    }
-  }
-}
+

@@ -1,6 +1,13 @@
-variable "region" {
+variable "databricks_name"{
+  type = string
+
+  }
+variable "tags" {
+  type = map(string)
+  
+}
+  variable "region" {
   type    = string
-  default = "westus"
 
 }
 variable "cidr" {
